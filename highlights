@@ -1,0 +1,35 @@
+Roblox introduced a new feature called "Highlight" that allows you to visually enhance specific objects in the game. Here's a Roblox script that utilizes Highlight to make players glow:
+
+Local Script:
+
+Lua
+local Players = game:GetService("Players")
+local character = script.Parent:GetCharacter()
+
+local function highlightPlayer(player)
+  local highlight = character:FindFirstChild("Highlight")
+  if not highlight then
+    highlight = script.Parent:Instantiate("Highlight")
+    highlight.Parent = character
+  end
+  highlight.Enabled = true
+  highlight.Adornee = player.Character.Humanoid:FindFirstChild("Head") -- Attaches highlight to player's head
+  highlight.OutlineColor = Color3.fromRGB(255, 255, 0) -- Sets highlight color to yellow
+  highlight.OutlineTransparency = 0.5 -- Makes the highlight partially transparent
+end
+
+Players.PlayerAdded:Connect(function(player)
+  if player ~= script.Parent then -- Avoid highlighting yourself
+    highlightPlayer(player)
+  end
+end)
+
+-- Optionally, remove highlight on player removal
+Players.PlayerRemoving:Connect(function(player)
+  if player ~= script.Parent then
+    local highlight = character:FindFirstChild("Highlight")
+    if highlight then
+      highlight.Enabled = false
+    end
+  end
+end)
